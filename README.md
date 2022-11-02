@@ -9,7 +9,7 @@
     </a>
     <br>
     <span>
-        So you've landed in a strange finite field. Only thing to do now is setup basecamp.
+        Así que has aterrizado en un extraño campo finito. Lo único que queda por hacer ahora es configurar el campo base.
     </span>
 </p>
 
@@ -22,15 +22,15 @@
 4. [Camp_4: BUIDL](./camp_4/README.md)
 5. [Camp_5: Peering into the future](./camp_5/README.md)
 
-### Overview
+### Visión General
 
-Basecamp is a curriculum built to teach the fundamental building blocks of the Cairo programming language and StarkNet development.
+Basecamp es un plan de estudios creado para enseñar los componentes básicos del lenguaje de programación Cairo y el desarrollo de StarkNet.
 
-### Setup
+### Ajustes
 
-Camp_2 will require the basic cairo-lang [setup](https://www.cairo-lang.org/docs/quickstart.html)
+Camp_2 requerirá lo básico de cairo-lang [Ajustes](https://www.cairo-lang.org/docs/quickstart.html)
 
-Camp_3 will require the ultimate development environment [setup](https://medium.com/starknet-edu/the-ultimate-starknet-dev-environment-716724aef4a7)
+Camp_3 requerirá el Ultimate entorno de desarrollo [Ajustes](https://medium.com/starknet-edu/the-ultimate-starknet-dev-environment-716724aef4a7)
 
 ### Links
 
@@ -38,12 +38,12 @@ Camp_3 will require the ultimate development environment [setup](https://medium.
 - starknet docs: <https://docs.starknet.io>
 - cairo docs: <https://www.cairo-lang.org/docs>
 
-### Issues
+### Incidencias
 
-If you find an issue/bug or have a feature request please submit an issue here
+Si encuentra un problema/error o tiene una solicitud de función, envíe un problema aquí
 [Issues](https://github.com/starknet-edu/basecamp/issues)
 
-### Contributing
+### Contribuir
 
-If you are looking to contribute, please head to the
-[Contributing](https://github.com/starknet-edu/basecamp/blob/main/CONTRIBUTING.md) section. We would especially love PRs including alternate programming language for the examples included in this repository.
+Si desea contribuir, por favor diríjase a la
+[Contribución](https://github.com/starknet-edu/basecamp/blob/main/CONTRIBUTING.md) sección. Nos encantaría especialmente que las relaciones públicas incluyan un lenguaje de programación alternativo para los ejemplos incluidos en este repositorio.
