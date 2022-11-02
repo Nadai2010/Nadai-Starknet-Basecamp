@@ -14,67 +14,68 @@
 4. [Rollups](./rollups/README.md)
 
 <h2 align="center">Overview</h2>
-This primer is inteded to cover introductory concepts upon which Cairo and StarkNet are built, and also to get you acquainted with the format of this course. Each section will involve drilling down on a high-level concept as it pertains to StarkNet or Cairo until we hit an "atomic" or irreducible concept we can represent in a simple/runnable code example:
+Este manual está diseñado para cubrir los conceptos introductorios sobre lo que se construye en Cairo y StarkNet, y también para que se familiarice con el formato de este curso. Cada sección implicará profundizar en un concepto de alto nivel relacionado con StarkNet o Cairo hasta que lleguemos a un concepto "atómico" o irreducible que podamos representar en un ejemplo de código simple/ejecutable:
+
 
 <div align="center">
     <img src="../misc/plat.png">
 </div>
 
-Code examples will be named by the programming language in which they are implemented, for example Bitcoin block verification in [Golang](https://go.dev/doc/install) (if you can implement these example in other languages we would love a PR):
+Los ejemplos de código serán nombrados por el lenguaje de programación en el que se implementan, por ejemplo, la verificación de bloques de Bitcoin en [Golang](https://go.dev/doc/install) (si puede implementar estos ejemplos en otros idiomas, nos encantaría PR):
+
 <div align="center">
     <a href="./bitcoin/block_verification/go">bitcoin/block_verification/go</a>
 </div>
 
-The topics covered in this primer have been disected in hundreds of ways by thousands of people, so wherever possible I will be linking to those resources.
+Los temas tratados en este manual han sido discutidos de cientos de maneras por miles de personas, por lo que, siempre que sea posible, me vincularé a esos recursos.
 
 <div align="center">
-    <em>Standing on the shoulders of giants blah blah blah lets get to the good stuff</em>
+    <em>De pie sobre los hombros de gigantes, bla, bla, bla, vamos a lo bueno</em>
 </div>
 
-<h3 align="center"> What are we solving for?</h3>
-The advent of blockchain technology has given the world computational systems with absolute transparency and inclusive accountabiliy. In order to obtain these characteristics, blockchain systems have been forced to make large trade offs which impact usability. Vitalik Buterin, summed up this issue in "The Blockchain Trilemma" stating:
+<h3 align="center"> ¿Para que estamos resolviendo?</h3>
+El advenimiento de la tecnología blockchain le ha dado al mundo sistemas computacionales con absoluta transparencia y responsabilidad inclusiva. Para obtener estas características, los sistemas de cadena de bloques se han visto obligados a realizar grandes compensaciones que afectan la usabilidad. Vitalik Buterin, resumió este problema en "The Blockchain Trilemma" afirmando:
 
 <br>
 <br>
 <div align="center">
-    <em>blockchains are forced to make trade-offs that prevent them from being decentralized, scalable, and secure.</em>
+    <em>las cadenas de bloques se ven obligadas a hacer concesiones que les impiden ser descentralizadas, escalables y seguras.</em>
 </div>
 <br>
 
-In this course you will learn how StarkWare attempts to tackle the Blockchain Trillemma and provide a system that is
-inclusively accountable, decentralized, scalable, and secure through the use of zero-knowledge STARK proofs.
+En este curso, aprenderá cómo StarkWare intenta abordar el Blockchain Trillemma y proporcionar un sistema que es inclusivamente responsable, descentralizado, escalable y seguro mediante el uso de pruebas STARK de conocimiento cero.
 
 <p align="center">
     🎯
-    <strong>Goals: </strong>
-    secure, inclusively accountable, decentralized, scalable, expressive
+    <strong>Retos: </strong>
+    Segura, inclusivamente responsable, descentralizada, escalable, expresiva
     🎯
 </p>
 
-<h2 align="center"> Evolution of Data Security</h2>
+<h2 align="center"> Evolución de la seguridad de los datos</h2>
 <div align="center">
     <img src="../misc/evolution.png">
 </div>
 
-For a more concrete example of the trillemna we can move outside of the blockchain context entirely. Say Alice has an important piece of data she needs access to. To start we will represent this data as ascii characters in YAML format:
+Para un ejemplo más concreto de trillemna, podemos movernos completamente fuera del contexto de la cadena de bloques. Digamos que Alice tiene un dato importante al que necesita acceder. Para empezar representaremos estos datos como caracteres ascii en formato YAML:
 
 ```yaml
 alice_account: 5.00
 ```
 
-Let's write it to a file on our computers disk and measure performance:
+Escribámoslo en un archivo en el disco de nuestra computadora y midamos el rendimiento:
 
 ```bash
 time echo "alice_account: 5.00" >> bank.yaml
 ```
 
-Let's read that information:
+Leamos esa información:
 
 ```bash
 time cat bank.yaml
 ```
 
-It's obviously very fast to read and write this data from our local disk, and powerful [database mechanisms](https://www.postgresql.org) can be applied to optimize accesss to the data. BUT if you drop your computer or get too close to a large ACME magnet Alice looses her valuable bank account information.
+Obviamente, es muy rápido leer y escribir estos datos desde nuestro disco local, y se pueden aplicar poderosos [mecanismos de base de datos](https://www.postgresql.org) para optimizar los accesos a los datos. PERO si deja caer su computadora o se acerca demasiado a un gran imán ACME, Alice pierde la valiosa información de su cuenta bancaria.
 <p align="center">
     🎯
     <strong>Goals: </strong>
@@ -87,47 +88,48 @@ It's obviously very fast to read and write this data from our local disk, and po
 </p>
 <p align="center">
     💡
-    <strong>Let's replicate Alice's account on another computer</strong>
+    <strong>Vamos a replicar la cuenta de Alice en otra computadora</strong>
     💡
 </p>
-If we replicate Alice's bank account YAML file on multiple computers, when one fails we haven't lost the data!
+Si replicamos el archivo YAML de la cuenta bancaria de Alice en varias computadoras, cuando una falla, ¡no hemos perdido los datos!
 
-Sender Questions:
+Preguntas del remitente:
 
-- How do I locate a recieving host to send to?
-- How do I know recieving host successfully wrote Alice's account data?
-- If I change Alice's account value how will the recieving host know to update the same value?
+- ¿Cómo ubico un host receptor al que enviar?
+- ¿Cómo sé que el host receptor escribió con éxito los datos de la cuenta de Alice?
+- Si cambio el valor de la cuenta de Alice, ¿cómo sabrá el host receptor que actualice el mismo valor?
 
-Reciever Questions:
+Preguntas del receptor:
 
-- Who will I recieve data from?
-- If I change Alice's account value how will the sending host know to update the same value?
+- ¿De quién recibiré datos?
+- Si cambio el valor de la cuenta de Alice, ¿cómo sabrá el host de envío que debe actualizar el mismo valor?
 
-### Distributed Systems
+### Sistemas distribuidos
 
-These questions form the basis of distributed systems and distributed computing across a network, and have been studied since the inception of the internet.
+Estas preguntas forman la base de los sistemas distribuidos y la computación distribuida a través de una red, y se han estudiado desde el inicio de Internet.
 
-Let's look briefly at how one of the more popular distributed databases [CassandraDB](https://cassandra.apache.org/doc/latest/cassandra/getting_started/configuring.html) handles these issues.
+Veamos brevemente cómo una de las bases de datos distribuidas más populares [CassandraDB](https://cassandra.apache.org/doc/latest/cassandra/getting_started/configuring.html) maneja estos problemas.
 
-You can see when configuring the system you are required to whitelist the `seed node` IP Addresses that will form our trusted cluster that partake in a limited peer-to-peer [gossip](https://www.linkedin.com/pulse/gossip-protocol-inside-apache-cassandra-soham-saha). Although this is suitable for many traditional systems we are strive to build inclusive and permissionless systems.
+Al configurar el sistema, puede ver que debe incluir en la lista blanca las direcciones IP del 'nodo semilla' que formarán nuestro clúster de confianza que participará en un [gossip](https://www.linkedin.com/pulse/gossip-protocol-inside-apache-cassandra-soham-saha) de igual a igual limitado. Aunque esto es adecuado para muchos sistemas tradicionales, nos esforzamos por construir sistemas inclusivos y sin permisos.
 
-Once the distributed database is setup we gain "Fault Tolerance" for Alice's valuable bank data. If someone accidently brings their large ACME magnet into one datacenter, the data is easily accesible on redundant hosts. Similar to blockchains these distributed systems made tradeoffs to the simple I/O example above. So what did we give up for this fault tolerance?
+Una vez que se configura la base de datos distribuida, obtenemos "Tolerancia a fallas" para los valiosos datos bancarios de Alice. Si alguien trae accidentalmente su gran imán ACME a un centro de datos, se puede acceder fácilmente a los datos en hosts redundantes. De manera similar a las cadenas de bloques, estos sistemas distribuidos hicieron concesiones al ejemplo simple de I/O anterior. 
 
-Banks Perspective:
+Entonces, ¿a qué renunciamos por esta tolerancia a fallas?
 
-- Network overhead impacts performance
-- Redundancy and replication impacts performance
-- Infrastructure maintenance ($$$$)
+Perspectiva de los bancos:
 
-Alice's Perspective:
+- La sobrecarga de la red afecta el rendimiento
+- La redundancia y la replicación afectan el rendimiento
+- Mantenimiento de infraestructura ($$$$)
 
-- Delegates trust to the bank:
-  - database is configured correctly
-  - operational security can handle attackers or intruders
-  - is not doing anything duplicitous
+La perspectiva de Alicia:
+
+- Delegados de confianza al banco:
+  - la base de datos está configurada correctamente
+  - la seguridad operativa puede manejar atacantes o intrusos
+  - no está haciendo nada engañoso
   - etc.
-- Costs typically get passed to Alice
-
+- Los costos generalmente se pasan a Alice
 <p align="center">
     🎯
     <strong>Goals: </strong>
@@ -140,15 +142,15 @@ Alice's Perspective:
 </p>
 <p align="center">
     💡
-    <strong>Let's replicate Alice's account on ANY computer</strong>
+    <strong>Vamos a replicar la cuenta de Alice en CUALQUIER computadora</strong>
     💡
 </p>
 
 ### [Bitcoin](./bitcoin/README.md)
 
-Bitcoin brings various computer science concepts together with [game theory](https://en.wikipedia.org/wiki/Game_theory) to create a truly peer-to-peer network and negates the need to delegate our trust to a central part.
+Bitcoin reúne varios conceptos informáticos junto con la [game theory](https://en.wikipedia.org/wiki/Game_theory) para crear una verdadera red peer-to-peer y niega la necesidad de delegar nuestra confianza en una parte central.
 
-The nodes trust the block producer based on its valid [proof of work](./bitcoin/proof_of_work) and the network collectively agrees on a set of canonical updates to the state of the Bitcoin ledger and the state of Alice's account.
+Los nodos confían en el productor de bloques en función de su [proof of work](./bitcoin/proof_of_work) y la red acuerda colectivamente un conjunto de actualizaciones canónicas del estado del libro mayor de Bitcoin y el estado de la cuenta de Alice.
 
 ```bash
 # proof of work example
@@ -156,7 +158,7 @@ cd bitcoin/proof_of_work/go
 go run main.go
 ```
 
-The Bitcoin nodes themselves listen for and [validate](./bitcoin/block_verifcation) blocks of transactions that are broadcast to the network by the miner of that block. They form a data structure called a Merkle Tree to obtain a root hash corresponding to all the transactions (and their order) in that block. If one tx changes by even a single bit the merkle root will be completely different.
+Los propios nodos de Bitcoin escuchan y [validate](./bitcoin/block_verifcation) bloques de transacciones que el minero de ese bloque transmite a la red. Forman una estructura de datos llamada Merkle Tree para obtener un hash raíz correspondiente a todas las transacciones (y su orden) en ese bloque. Si un tx cambia incluso un solo bit, la raíz de Merkle será completamente diferente.
 
 ```bash
 # block verification example
@@ -164,23 +166,22 @@ cd bitcoin/block_verification/go && go mod tidy
 go run main.go utils.go
 ```
 
-Alice's information gets formatted as a [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) and is replicated on all of the [nodes](https://bitnodes.io) on the Bitcoin network. She can even validate that everything is acurate herself by rehashing the merkle tree of every block of transactions from genesis to now.
+La información de Alice se formatea como [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) y se replica en todos los [nodos](https://bitnodes.io) en la red Bitcoin. Incluso puede validar que todo es exacto por sí misma repasando el árbol merkle de cada bloque de transacciones desde el génesis hasta ahora.
 <p align="center">
     🎉
     <strong>NO DELEGATION OF TRUST</strong>
     🎉
 </p>
-Let's revisit the trillemma. What did we giveup to get this trustless data security?
+Repasemos el trillema. ¿A qué renunciamos para obtener esta seguridad de datos sin confianza?
 
-- Miners expend energy as they attempt to get the nonce
-- Full trustless verification requires EACH node to replicate the canonical state:
-  - hash the merkle tree of transactions
-  - hash the block header
+- Los mineros gastan energía mientras intentan obtener el nonce
+- La verificación sin confianza completa requiere que CADA nodo replique el estado canónico:
+   - hash el árbol merkle de transacciones
+   - hash el encabezado del bloque
 
-Full Node Size: ~405GB
+Tamaño de nodo completo: ~405 GB
   
-For a naive demonstration of "The Evolution of Data Security" run the following:
-
+Para una demostración ingenua de "La evolución de la seguridad de los datos", ejecute lo siguiente:
 ```bash
 cd bitcoin/block_verification/go && go mod tidy
 go test ./... -bench=. -count 5
@@ -198,46 +199,45 @@ go test ./... -bench=. -count 5
 </p>
 <p align="center">
     💡
-    <strong>Let's let Alice use her data</strong>
+    <strong>Dejemos que Alice use sus datos</strong>
     💡
 </p>
 
 <h2 align="center" id="smart_contracts">Smart Contracts</h2>
 
-Smart contracts were first proposed by [Nick Szabo](https://www.fon.hum.uva.nl/rob/Courses/InformationInSpeech/CDROM/Literature/LOTwinterschool2006/szabo.best.vwh.net/smart.contracts.html) as a transaction protocol that executes the terms of a contract, giving all parties transparency into the rule set and execution. Bitcoin facilitates a limited version of [smart contracts](https://ethereum.org/en/whitepaper/#scripting), but the expressive smart contract model of Ethereum has been more widely adopted.
-
+Los contratos inteligentes fueron propuestos por primera vez por [Nick Szabo](https://www.fon.hum.uva.nl/rob/Courses/InformationInSpeech/CDROM/Literature/LOTwinterschool2006/szabo.best.vwh.net/smart.contracts.html ) como un protocolo de transacción que ejecuta los términos de un contrato, brindando a todas las partes transparencia en el conjunto de reglas y la ejecución. Bitcoin facilita una versión limitada de [contratos inteligentes](https://ethereum.org/en/whitepaper/#scripting), pero el expresivo modelo de contrato inteligente de Ethereum se ha adoptado más ampliamente.
 <h2 align="center">Ethereum</h2>
 
-Ethereum provides a platform to implement these smart contracts with the use of the [Ethereum Virtual Machine](./ethereum/ethereum_virtual_machine). In the Ethereum paradigm Alice's bank account information is stored in a 20-byte address called an [account](https://ethereum.org/en/whitepaper/#ethereum-accounts). Her account balance along with a few more fields (nonce, storageRoot, codeHash) become a "node" in a data structure called a Patricia Trie where PATRICIA stands for "Practical Algorithm to Retrieve Information Coded in Alphanumeric".
+Ethereum proporciona una plataforma para implementar estos contratos inteligentes con el uso de la [Ethereum Virtual Machine](./ethereum/ethereum_virtual_machine). En el paradigma Ethereum, la información de la cuenta bancaria de Alice se almacena en una dirección de 20 bytes llamada [cuenta] (https://ethereum.org/en/whitepaper/#ethereum-accounts). El saldo de su cuenta junto con algunos campos más (nonce, storageRoot, codeHash) se convierten en un "nodo" en una estructura de datos llamada Patricia Trie, donde PATRICIA significa "Algoritmo práctico para recuperar información codificada en alfanumérico".
 
-This `Trie` is a specific type of tree that encodes a `key` as a path of common prefixes to its corresponding `value`. So Alice's Bank Account can be found at an address("key") that points to an account ("value") in Ethereum's World State (trie). The tree structure of the trie allows us to obtain a cryptographic hash of each node all the way up to a single hash corresponding to the `root` similar to the Merkle tree we saw in the Bitcoin block verification.
+Este 'Trie' es un tipo específico de árbol que codifica una 'clave' como una ruta de prefijos comunes a su 'valor' correspondiente. Entonces, la cuenta bancaria de Alice se puede encontrar en una dirección ("clave") que apunta a una cuenta ("valor") en el estado mundial de Ethereum (trie). La estructura de árbol del trie nos permite obtener un hash criptográfico de cada nodo hasta un solo hash correspondiente a la "raíz" similar al árbol de Merkle que vimos en la verificación del bloque de Bitcoin.
 
-For an example of the MPT data structure you can use this diagram for reference:
+Para ver un ejemplo de la estructura de datos MPT, puede usar este diagrama como referencia:
 
 <div align="center">
     <img src="../misc/trie.png">
 </div>
 
-and run the following:
+y ejecuta lo siguiente:
 
 ```bash
 cd ethereum/block_verification/go && go mod tidy
 go run *.go
 ```
 
-Ethereum then propogates its state by verifying transactions are well-formed and applying then to accounts. Alice has a public/private key pair to manager her "externally owned account" and can sign transactions that involve her balance or involve interacting with other contracts in the state.
+Luego, Ethereum propaga su estado al verificar que las transacciones estén bien formadas y aplicarlas a las cuentas. Alice tiene un par de claves pública/privada para administrar su "cuenta de propiedad externa" y puede firmar transacciones que involucren su saldo o impliquen interactuar con otros contratos en el estado.
 
-In addition to EOAs Ethereum has "contract accounts" which are controlled by the contract code associated with them. Everytime the contract account receives a message the bytecode that is stored as an [RLP encoded](https://eth.wiki/fundamentals/rlp) value in the account storage trie begins to execute according to the rules of the EVM.
+Además de los EOA, Ethereum tiene "cuentas de contrato" que están controladas por el código de contrato asociado a ellas. Cada vez que la cuenta del contrato recibe un mensaje, el código de bytes que se almacena como un valor [codificado en RLP](https://eth.wiki/fundamentals/rlp) en el almacenamiento de la cuenta comienza a ejecutarse de acuerdo con las reglas de EVM.
 
-Trillemma visit: what did we give up to add expressivity?
+Visita Trillemma: ¿a qué renunciamos para sumar expresividad?
 
-- Every transaction still needs to be processed by every node in the network.
-- With the addition of world state storage the blockchain can "bloat" leading to centralization risk
-- Alice may pay $100 to use the money in her account
+- Cada transacción aún debe ser procesada por cada nodo de la red.
+- Con la adición del almacenamiento de estado mundial, la cadena de bloques puede "inflarse", lo que lleva a un riesgo de centralización
+- Alice puede pagar $100 para usar el dinero en su cuenta
 
-Full Node Size: ~700 GB
+Tamaño de nodo completo: ~700 GB
 
-Archive Node Size: ~10 TB
+Tamaño del nodo de archivo: ~10 TB
 
 <p align="center">
     🎯
@@ -251,34 +251,31 @@ Archive Node Size: ~10 TB
 </p>
 <p align="center">
     💡
-    <strong>Let's optimize Alice's data utility</strong>
+    <strong>Optimicemos la utilidad de datos de Alice</strong>
     💡
 </p>
 
 <h2 align="center"> Rollups</h2>
 
-As demand for block space increases the cost to execute on `Layer 1` (full consensus protocols e.g. Bitcoin, Ethereum) will become increasingly expensive, and until certain [state expiry mechanisms](https://notes.ethereum.org/@vbuterin/verkle_and_state_expiry_proposal) are implemented
-we can expect the state of the L1 to continue to bloat over time. This will require increasingly robust machine to maintain the state
-and subsequently verify the blocks.
+A medida que aumenta la demanda de espacio en bloque, el costo de ejecución en la "Capa 1" (protocolos de consenso total, por ejemplo, Bitcoin, Ethereum) será cada vez más costoso, y hasta ciertos [state expiry mechanisms](https://notes.ethereum.org/@vbuterin/verkle_and_state_expiry_proposal) se implementan y podemos esperar que el estado de la L1 continúe aumentando con el tiempo. Esto requerirá una máquina cada vez más robusta para mantener el estado y posteriormente verificar los bloques.
 
-Rollups are one solution in which business logic is executed and stored in a protocol outside the Ethereum context and then
-proves its succesful execution in the Ethereum context.
+Los rollups son una solución en la que la lógica empresarial se ejecuta y almacena en un protocolo fuera del contexto de Ethereum y luego demuestra su ejecución exitosa en el contexto de Ethereum.
 
-Typically this involves compressing a larger number of transactions at this `Layer 2` and commiting the state diffs to a smart contract deployed on L1.
-For full interoperability with the L1 rollups also typically implement a messaging component for deposits and withdrawls.
+Por lo general, esto implica comprimir una mayor cantidad de transacciones en esta "Capa 2" y comprometer las diferencias de estado en un contrato inteligente implementado en L1.
+Para una interoperabilidad total con los paquetes acumulativos L1, también suele implementar un componente de mensajería para depósitos y retiros.
 
-There are currently two types of rollups that are being widely adopted:
+Actualmente hay dos tipos de acumulaciones que se están adoptando ampliamente:
 
-- Optimistic Rollups
-- Zero-Knowledge Rollups
+- Paquetes acumulativos optimistas
+- Paquetes acumulativos de conocimiento cero
 
-Vitalik provides a good comparison of the two [here](https://vitalik.ca/general/2021/01/05/rollup.html#optimistic-rollups-vs-zk-rollups), and touches on the final pieces of our long
-trilemma journey:
+Vitalik proporciona una buena comparación de los dos [aquí](https://vitalik.ca/general/2021/01/05/rollup.html#optimistic-rollups-vs-zk-rollups), y toca las piezas finales de nuestro largo
+viaje del trilema:
 
-***No matter how large the computation, the proof can be very quickly verified on-chain.***
+***No importa cuán grande sea el cálculo, la prueba se puede verificar muy rápidamente en la cadena.***
 
-This allows Alice to move her money freely between L1 and L2 (...soon to be L3) and operate on an low-cost, expressive blockchain layer.
-All while inheritting the highest form of data security evolution from the L1 and not having to delegate trust to any centralized party!
+Esto le permite a Alice mover su dinero libremente entre L1 y L2 (... pronto será L3) y operar en una capa expresiva de cadena de bloques de bajo costo.
+¡Todo mientras hereda la forma más alta de evolución de seguridad de datos de L1 y no tiene que delegar la confianza a ninguna parte centralizada!
 
 <p align="center">
     🎯
