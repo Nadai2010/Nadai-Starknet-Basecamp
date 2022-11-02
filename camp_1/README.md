@@ -21,13 +21,13 @@
 
 <div align="center">
     <h2 id="modular_arithmetic">Modular Arithmetic</h2>
-    <p>A system of arithmetic for integers where numbers "wrap around" when reaching a certain value (aka 'modulus')</p>
+    <p>Un sistema de aritmética para números enteros donde los números "envuelven" cuando alcanzan un cierto valor (también conocido como 'módulo')</p>
     <img src="../misc/modular.png">
 </div>
 
-A real-world example of modular arithmetic is time-keeping via a clock. When the hour of the day exceed the modulus(12) we "wrap" around and begin at zero.
+Un ejemplo del mundo real de la aritmética modular es el cronometraje a través de un reloj. Cuando la hora del día excede el módulo (12), "envolvemos" y comenzamos en cero.
 
-Example:
+Ejemplo:
 
 ```bash
 python3 finite_fields/python/modular_arithmetic.py
@@ -35,11 +35,11 @@ python3 finite_fields/python/modular_arithmetic.py
 
 <h2 align="center" id="finite_fields">Finite Fields</h2>
 
-Much of today's practical cryptography is based on `finite fields`. A finite field is a field that contains a finite number of elements and defines arithmetic operations for multiplication, addition, subtraction, and divsion. These arithmetic operations are.
+Gran parte de la criptografía práctica actual se basa en "campos finitos". Un campo finito es un campo que contiene un número finito de elementos y define operaciones aritméticas de multiplicación, suma, resta y división. Estas operaciones aritméticas son.
 
-A finite field cannot contain sub-fields and therefore typically implements the principles of modular arithmetic over a large, irreducible prime number. The number of elements in the field is also known as its `order`.
+Un campo finito no puede contener subcampos y, por lo tanto, normalmente implementa los principios de la aritmética modular sobre un número primo grande e irreducible. El número de elementos en el campo también se conoce como su "orden".
 
-Example:
+Ejemplo:
 
 ```bash
 python3 finite_fields/python/finite_field_arithmetic.py
@@ -47,9 +47,9 @@ python3 finite_fields/python/finite_field_arithmetic.py
 
 <h2 align="center" id="polynomials">Polynomials</h2>
 
-`Polynomials` have properties that are very useful in [ZK proofs](https://www.youtube.com/watch?v=iAaSQfZ-2AM). A polynomial is an expression of more than two algebraic terms. The degree of a polynomial is the highest degree of any specific term.
+`Polynomials` tienen propiedades que son muy útiles en [pruebas ZK](https://www.youtube.com/watch?v=iAaSQfZ-2AM). Un polinomio es una expresión de más de dos términos algebraicos. El grado de un polinomio es el grado más alto de cualquier término específico.
 
-For an example of how Polynomials can be built and expressed in code run:
+Para ver un ejemplo de cómo se pueden construir y expresar los polinomios en la ejecución del código:
 
 ```bash
 python3 finite_fields/python/polynomial.py
@@ -57,32 +57,32 @@ python3 finite_fields/python/polynomial.py
 
 <h2 align="center" id="zk_terminology">ZK Terminology</h2>
 
-Zero Knowledge Proof Systems are proof systems in which there is secret information known to the `prover` that is not known to the `verifier`, and the verifier is still convinced of the computational claim.
+Los sistemas de prueba de conocimiento cero son sistemas de prueba en los que hay información secreta conocida por el "probador" que no es conocida por el "verificador", y el verificador todavía está convencido de la afirmación computacional.
 
-A `non-interactive` proof system is an abstract machine that models computation between the two parties(prover and verifier). Messages are sent in [one direction](https://www.youtube.com/watch?v=QJO3ROT-A4E) until the verifier is convinced of the computational claim.
+Un sistema de prueba "no interactivo" es una máquina abstracta que modela el cálculo entre las dos partes (proveedor y verificador). Los mensajes se envían en [una dirección](https://www.youtube.com/watch?v=QJO3ROT-A4E) hasta que el verificador está convencido de la afirmación computacional.
 
-A `succinct` proof system is one in which the verifier can run an order of magnitute faster than a naive re-execution of the program
+Un sistema de prueba "sucinto" es aquel en el que el verificador puede ejecutar una orden de magnitud más rápido que una reejecución ingenua del programa.
 
-`SNARKS`: Succint Non-Interactive Arguments of Knowledge
+`SNARKS`: Argumentos de conocimiento sucintos y no interactivos
 
-`STARKs`: Scalable Transparent Arguments of Knowled
+`STARKs`: argumentos transparentes escalables de Knowled
 
 <h2 align="center" id="computational_integrity">Computational Integrity</h2>
 
-The goal of these proof systems is to prove `computational integrity` to a verifier. Computational Integrity can be formalized as follow:
+El objetivo de estos sistemas de prueba es demostrar la "integridad computacional" a un verificador. La integridad computacional se puede formalizar de la siguiente manera:
 
-***Statement of Computational Integrity = (S0, P, T, S1)***
+***Declaración de integridad computacional = (S0, P, T, S1)***
 
-`S0`: Initial State
-`P`: Program that changes state
-`T`: Number of steps
-`S1`: Final State
+`S0`: Estado inicial
+`P`: Programa que cambia de estado
+`T`: Número de pasos
+`S1`: Estado Final
 
 <h2 align="center" id="starks">STARKs</h2>
 
-`UNDER CONSTRUCTION`:
+`EN CONSTRUCCIÓN`:
 
-While this section is being built we recommend reading this blog post series([1](https://medium.com/starkware/stark-math-the-journey-begins-51bd2b063c71), [2](https://medium.com/starkware/arithmetization-i-15c046390862), [3](https://medium.com/starkware/arithmetization-ii-403c3b3f4355)) on the math behind STARKs.
+Mientras se crea esta sección, recomendamos leer esta serie de publicaciones de blog ([1](https://medium.com/starkware/stark-math-the-journey-begins-51bd2b063c71), [2](https://medium .com/starkware/arithmetization-i-15c046390862), [3](https://medium.com/starkware/arithmetization-ii-403c3b3f4355)) sobre las matemáticas detrás de STARK.
 
 <hr>
 
